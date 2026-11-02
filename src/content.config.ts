@@ -113,4 +113,34 @@ const consulting = defineCollection({
   }),
 });
 
-export const collections = { projects, about, consulting };
+/** Home page texts and the footer line: src/content/home.md */
+const home = defineCollection({
+  loader: glob({ pattern: 'home.md', base: './src/content', generateId: () => 'home' }),
+  schema: z.object({
+    heroLabel: z.string(),
+    heroCaption: z.string().optional(),
+    intro: z.string(),
+    availabilityNote: z.string().optional(),
+    stepsTitle: z.string().default('How I work'),
+    steps: z.array(z.object({ title: z.string(), text: z.string() })).default([]),
+    /** The two rows of the moving word band; leave both empty to hide it. */
+    marquee: z.array(z.string()).default([]),
+    marqueeOutline: z.array(z.string()).default([]),
+    selectedTitle: z.string().default('Selected work'),
+    cta: z
+      .object({
+        show: z.boolean().default(true),
+        kicker: z.string().default(''),
+        title: z.string(),
+        text: z.string().default(''),
+        button: z.string().default('Read more'),
+      })
+      .optional(),
+    /** "{count}" is replaced by the number of design work projects. */
+    projectsLede: z.string(),
+    hobbyLede: z.string(),
+    footerTitle: z.string(),
+  }),
+});
+
+export const collections = { projects, about, consulting, home };

@@ -1,21 +1,39 @@
 services:
+  # The public site: nginx serving whatever the editor last published.
   portfolio:
-    build:
-      context: .
-      args:
-        # The address people will use to reach the site.
-        SITE_URL: https://www.osterbergdesign.site
-    image: osterberg-portfolio:latest
+    image: nginx:1.27-alpine
     container_name: osterberg-portfolio
     ports:
       # Open http://<server-ip>:8080 — change the left number if 8080 is taken.
       - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - site:/srv/site:ro
     depends_on:
+      - editor
       - contact
     restart: unless-stopped
 
-  # Sends the contact form on /consulting/ to your inbox. Settings live in .env (copy .env.example).
-  # Without a .env the site still works; the form then offers to send an ordinary email instead.
+  # Builds the site, and runs the private editor with live preview on port 8081
+  # (edit.osterbergdesign.site). Settings live in .env — see .env.example.
+  editor:
+    build: ./editor
+    image: osterberg-editor:latest
+    container_name: osterberg-editor
+    ports:
+      - "8081:8081"
+    volumes:
+      - .:/repo
+      - site:/srv/site
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      # The address people use to reach the public site.
+      SITE_URL: https://www.osterbergdesign.site
+    restart: unless-stopped
+
+  # Sends the contact form on /consulting/ to your inbox. Also configured in .env.
   contact:
     build: ./contact
     image: osterberg-contact:latest
@@ -26,3 +44,7 @@ services:
     environment:
       SITE_NAME: osterbergdesign.site
     restart: unless-stopped
+
+volumes:
+  # Built versions of the site. The editor writes them, nginx reads them.
+  site:

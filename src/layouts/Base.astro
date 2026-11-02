@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import Logo from '../components/Logo.astro';
-import { getAbout } from '../lib/content';
+import { getAbout, getHome } from '../lib/content';
 
 interface Props {
   title?: string;
@@ -11,6 +11,7 @@ interface Props {
 }
 
 const about = await getAbout();
+const { footerTitle } = (await getHome()).data;
 const { name, email, phone, location, linkedin, github } = about.data;
 const siteTitle = `${name} — Industrial & technical design`;
 const { title, description = `Portfolio of ${name}: product design, prototyping, interaction and visualization.`, image } = Astro.props;
@@ -91,7 +92,7 @@ const year = new Date().getFullYear();
     <footer class="site-footer">
       <div class="container site-footer__inner">
         <div class="site-footer__lead">
-          <p class="site-footer__title">Have a thesis project for spring 2027? I'd like to hear about it.</p>
+          <p class="site-footer__title">{footerTitle}</p>
           <a class="site-footer__email" href={`mailto:${email}`}>{email}</a>
         </div>
         <dl class="site-footer__meta">

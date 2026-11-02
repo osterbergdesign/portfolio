@@ -1,6 +1,6 @@
 ---
 import ProjectCard from './ProjectCard.astro';
-import { disciplinesOf, getAbout, slugify, type Project, type Category } from '../lib/content';
+import { disciplinesOf, getAbout, getHome, slugify, type Project, type Category } from '../lib/content';
 
 interface Props {
   projects: Project[];
@@ -14,10 +14,8 @@ const { github } = (await getAbout()).data;
 const disciplines = disciplinesOf(projects);
 // The tabs only appear once there is at least one hobby project to show.
 const showTabs = hobbyCount > 0 || active === 'hobby';
-const lede =
-  active === 'work'
-    ? `${projects.length} projects from Luleå University of Technology and my own studio — product design, interaction, materials, systems and visualization. Each one opens into the process behind it.`
-    : 'Things I design and build in my own time — circuit boards and software for my own smart home, and experiments with my own brand.';
+const home = (await getHome()).data;
+const lede = active === 'work' ? home.projectsLede.replaceAll('{count}', String(projects.length)) : home.hobbyLede;
 ---
 
 <section class="page-head container">

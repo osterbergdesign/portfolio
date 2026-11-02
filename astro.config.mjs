@@ -7,4 +7,10 @@ export default defineConfig({
   site: process.env.SITE_URL || 'https://www.osterbergdesign.site',
   trailingSlash: 'ignore',
   build: { format: 'directory' },
+  // The editor builds in a scratch folder; this keeps optimised images cached between builds.
+  cacheDir: process.env.ASTRO_CACHE_DIR || './node_modules/.astro',
+  // The editor shows the dev server as its live preview, without Astro's toolbar.
+  devToolbar: { enabled: false },
+  // Don't let the preview react to the editor's scratch build folder.
+  vite: { server: { watch: { ignored: ['**/.build/**'] } } },
 });

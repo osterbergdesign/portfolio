@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Editor — log in</title>
+    <style>
+      :root { --paper: #faf8f3; --paper-2: #f0ebe1; --ink: #1f2636; --ink-2: #4b5264; --rust: #ad542d; --signal: #d2452a; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 20px; background: var(--paper); color: var(--ink); font: 16px/1.5 Inter, system-ui, -apple-system, 'Segoe UI', sans-serif; }
+      main { width: min(100%, 380px); }
+      .mark { display: flex; gap: 6px; margin-bottom: 28px; }
+      .mark span { width: 28px; height: 28px; }
+      .mark span:nth-child(1) { background: var(--rust); border-radius: 50%; }
+      .mark span:nth-child(2) { background: #243049; }
+      .mark span:nth-child(3) { background: #d9a43a; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+      h1 { margin: 0 0 6px; font-size: 34px; line-height: 1; letter-spacing: -0.03em; font-weight: 900; text-transform: uppercase; }
+      p { margin: 0 0 24px; color: var(--ink-2); }
+      label { display: block; font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+      input { width: 100%; min-height: 48px; padding: 10px 14px; font: inherit; border: 2px solid var(--ink); border-radius: 0; background: #fff; }
+      input:focus-visible, button:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; }
+      button { margin-top: 16px; width: 100%; min-height: 48px; font: inherit; font-weight: 700; color: var(--paper); background: var(--ink); border: 0; cursor: pointer; }
+      button:hover { background: var(--rust); }
+      .error { margin: 0 0 16px; padding: 10px 12px; border-left: 4px solid var(--signal); background: var(--paper-2); color: var(--ink); }
+      .error[hidden] { display: none; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="mark" aria-hidden="true"><span></span><span></span><span></span></div>
+      <h1>Editor</h1>
+      <p>Log in to edit the portfolio.</p>
+      <p class="error" id="error" hidden></p>
+      <form method="post" action="/__editor/login">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required autofocus />
+        <button type="submit">Log in</button>
+      </form>
+    </main>
+    <script>
+      const err = new URLSearchParams(location.search).get('error');
+      if (err) {
+        const el = document.getElementById('error');
+        el.textContent = err === 'wait' ? 'Too many attempts. Wait 15 minutes and try again.' : "That password didn't work.";
+        el.hidden = false;
+      }
+    </script>
+  </body>
+</html>

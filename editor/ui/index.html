@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Editor — Portfolio</title>
+    <link rel="stylesheet" href="/__editor/ui/editor.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <button class="bar__menu" id="menu-toggle" type="button" aria-expanded="false" aria-controls="sidebar">Pages</button>
+      <div class="bar__brand"><span class="bar__dot" aria-hidden="true"></span>Editor</div>
+      <p class="bar__status" id="save-status" role="status" aria-live="polite"></p>
+      <div class="bar__actions">
+        <button class="btn btn--quiet" id="changes-btn" type="button" aria-haspopup="dialog">No unpublished changes</button>
+        <button class="btn btn--primary" id="publish-btn" type="button">Publish</button>
+        <details class="more">
+          <summary class="btn btn--quiet" aria-label="More">•••</summary>
+          <div class="more__menu">
+            <button type="button" id="update-btn">Get updates from GitHub</button>
+            <a id="live-link" href="#" target="_blank" rel="noopener">Open the live site ↗</a>
+            <button type="button" id="devlog-btn">Preview log</button>
+            <form method="post" action="/__editor/logout"><button type="submit">Log out</button></form>
+          </div>
+        </details>
+      </div>
+    </header>
+
+    <div class="layout">
+      <nav class="sidebar" id="sidebar" aria-label="Pages and projects"></nav>
+
+      <main class="form-pane" id="form-pane">
+        <div class="form" id="form"><p class="muted">Loading…</p></div>
+      </main>
+
+      <section class="preview-pane" aria-label="Preview">
+        <div class="preview-bar">
+          <div class="segmented" role="group" aria-label="Preview size">
+            <button type="button" data-size="desktop" aria-pressed="true">Desktop</button>
+            <button type="button" data-size="phone" aria-pressed="false">Phone</button>
+          </div>
+          <span class="preview-bar__path" id="preview-path">/</span>
+          <button class="btn btn--quiet btn--small" type="button" id="reload-btn">Reload</button>
+        </div>
+        <div class="preview-frame" id="preview-frame">
+          <iframe id="preview" title="Preview of the site" src="about:blank"></iframe>
+        </div>
+      </section>
+    </div>
+
+    <div class="pane-switch" role="group" aria-label="Show">
+      <button type="button" data-pane="form" aria-pressed="true">Edit</button>
+      <button type="button" data-pane="preview" aria-pressed="false">Preview</button>
+    </div>
+
+    <dialog class="dialog" id="dialog"></dialog>
+    <div class="toasts" id="toasts" aria-live="polite"></div>
+    <div class="starting" id="starting" hidden>
+      <div><span class="spinner" aria-hidden="true"></span><h1>Starting the editor…</h1><p id="starting-phase"></p></div>
+    </div>
+
+    <script type="module" src="/__editor/ui/editor.js"></script>
+  </body>
+</html>

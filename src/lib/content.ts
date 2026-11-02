@@ -22,6 +22,12 @@ export async function getAbout() {
   return about;
 }
 
+export async function getHome() {
+  const home = await getEntry('home', 'home');
+  if (!home) throw new Error('src/content/home.md is missing');
+  return home;
+}
+
 export async function getConsulting() {
   const consulting = await getEntry('consulting', 'consulting');
   if (!consulting) throw new Error('src/content/consulting.md is missing');

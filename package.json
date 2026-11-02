@@ -10,7 +10,8 @@
     "preview": "astro preview --host"
   },
   "dependencies": {
-    "astro": "^5.0.0"
+    "astro": "^5.0.0",
+    "yaml": "^2.8.0"
   },
   "engines": {
     "node": ">=20.3.0"
