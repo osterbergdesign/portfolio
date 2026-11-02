@@ -7,9 +7,8 @@ availability: Looking for a bachelor's thesis (exjobb) for spring 2027
 email: osterbergdesign@gmail.com
 phone: +46 72 962 25 68
 website: https://www.osterbergdesign.site
-linkedin: ""        # e.g. https://www.linkedin.com/in/your-name
+linkedin: "https://www.linkedin.com/in/max-österberg-961423252/" # e.g. https://www.linkedin.com/in/your-name
 github: https://github.com/osterbergdesign
-cv: ""              # put a PDF in public/ (e.g. public/max-osterberg-cv.pdf) and write /max-osterberg-cv.pdf here
 
 education:
   - period: 2022–
@@ -25,6 +24,9 @@ experience:
     title: Designer and consultant
     place: OsterbergDesign, own studio
     note: Logo, web design and brand manual for V73 AB; album covers and tour posters for the artist Eric Junior.
+  - period: 2026-
+    title: "Store associate "
+    place: Circle K mjölkudden
   - period: 2023–
     title: Sales associate
     place: Swedol, Luleå
@@ -59,7 +61,7 @@ skills:
 
 I'm an industrial design engineering student at Luleå University of Technology. The problems I enjoy most don't stay inside one discipline: a microphone that has to feel like Motown and still fit a display, a dial and a second mic; a protein product that only works if the factory behind it can switch to crisis mode; a vending machine that turns out to be a question of where people look.
 
-My process moves between sketchbook, clay, CAD, circuit board and render. I sketch to think, test form in my hands before I model it, and render to show what a product feels like — not just what it looks like.
+My process moves between sketchbook, clay, CAD, circuit board and render. I sketch to think, test form in my hands before I model it, and render to show what a product feels like, not just what it looks like.
 
 I've always been outgoing and I like working in groups. Alongside my studies I've worked in retail and sales, and I love working toward long-term relationships with customers.
 

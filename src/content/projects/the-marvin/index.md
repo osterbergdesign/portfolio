@@ -23,7 +23,7 @@ order: 1
 film:
   src: /videos/the-marvin.mp4
   poster: /videos/the-marvin-poster.jpg
-  caption: One minute — material close-ups, the exploded assembly, the lav mic out in the field, the EQ modes and the colour options.
+  caption: One minute — material close-ups, the exploded assembly, the lav mic out in the field, the EQ modes and the colour options. Edited with premier pro.
 gallery:
   - src: ./process-board.jpg
     alt: Process board showing moodboard, ideation sketches, two concepts with a clay study, CAD views, an exploded view and material swatches

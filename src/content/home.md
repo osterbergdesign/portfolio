@@ -14,8 +14,8 @@ steps:
     text: CAD in Fusion 360 and Alias, PCB design, and material and process selection.
   - title: Show
     text: Renders in Blender and KeyShot, and visual systems that keep the story consistent.
-marquee: [Sketch, Clay, CAD, PCB, Render, Prototype]
-marqueeOutline: [Observe, Interview, Print, Test, Iterate, Build]
+marquee: [Clay, CAD, PCB, Render, Prototype]
+marqueeOutline: [Observe, Print, Test, Iterate, Build]
 selectedTitle: Selected work
 cta:
   show: true
