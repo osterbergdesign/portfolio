@@ -15,8 +15,8 @@ highlights:
   - "Circular set-up: farm residues feed the crickets, and cricket waste goes back to the farm as fertiliser and feed"
   - "Crisis mode re-uses the same line: two machines idle, and output switches from 2,000 tins a day to 40 × 10 kg sacks"
   - Packaging material chosen in EduPack; full cost calculation from materials and night-shift wages to retail price
-cover: ./cover.jpg
-coverPosition: 70% 50%
+cover: ./gemini-generated-image-d51newd51newd51n.jpg
+coverPosition: 50% 50%
 coverAlt: Two white shipping containers printed with the Footprint logo in a field beside a red barn at sunset
 accent: olive
 featured: true
