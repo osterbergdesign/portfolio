@@ -289,6 +289,8 @@ p + p { margin-top: 1em; }
   max-width: 14ch;
 }
 .project__tagline { font-size: clamp(19px, 2vw, 24px); line-height: 1.35; max-width: 42ch; font-weight: 500; }
+.project__links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+.project__links .button::after { content: '↗'; margin-left: 8px; font-weight: 600; }
 .project__cover { margin-top: calc(-1 * clamp(110px, 14vw, 200px)); }
 .project__cover-frame { overflow: hidden; background: var(--paper-2); }
 .project__cover img { width: 100%; max-height: 80vh; object-fit: cover; background: var(--paper-2); }

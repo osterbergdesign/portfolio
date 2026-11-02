@@ -86,6 +86,7 @@ const last = rest.join(' ');
     <dl class="contact__list">
       <div><dt>Email</dt><dd><a href={`mailto:${d.email}`}>{d.email}</a></dd></div>
       {d.phone && <div><dt>Phone</dt><dd><a href={`tel:${d.phone.replace(/\s/g, '')}`}>{d.phone}</a></dd></div>}
+      {d.github && <div><dt>GitHub</dt><dd><a href={d.github}>{d.github.replace(/^https?:\/\/(www\.)?/, '')}</a></dd></div>}
       {d.linkedin && <div><dt>LinkedIn</dt><dd><a href={d.linkedin}>{d.linkedin.replace(/^https?:\/\/(www\.)?/, '')}</a></dd></div>}
       {d.website && <div><dt>Studio</dt><dd><a href={d.website}>{d.website.replace(/^https?:\/\/(www\.)?/, '')}</a></dd></div>}
     </dl>

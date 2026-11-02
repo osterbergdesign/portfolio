@@ -44,6 +44,8 @@ const projects = defineCollection({
       order: z.number().default(100),
       /** Drafts show up in `npm run dev` but are left out of the built site. */
       draft: z.boolean().default(false),
+      /** Buttons under the title, e.g. the code on GitHub or a live demo. */
+      links: z.array(z.object({ label: z.string(), url: z.string().url() })).default([]),
       /** A film shown full width under the story. Put the files in public/videos/. */
       film: z
         .object({
@@ -78,6 +80,7 @@ const about = defineCollection({
     phone: z.string().optional(),
     website: z.string().optional(),
     linkedin: z.string().optional(),
+    github: z.string().optional(),
     cv: z.string().optional(),
     education: z
       .array(z.object({ period: z.coerce.string(), title: z.string(), place: z.string(), note: z.string().optional() }))

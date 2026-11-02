@@ -8,6 +8,7 @@ email: osterbergdesign@gmail.com
 phone: +46 72 962 25 68
 website: https://www.osterbergdesign.site
 linkedin: ""        # e.g. https://www.linkedin.com/in/your-name
+github: https://github.com/osterbergdesign
 cv: ""              # put a PDF in public/ (e.g. public/max-osterberg-cv.pdf) and write /max-osterberg-cv.pdf here
 
 education:

@@ -43,6 +43,17 @@ const facts = [
         <a class="project__back" href={back.href}>{back.label}</a>
         <h1 class="project__title">{d.title}</h1>
         <p class="project__tagline">{d.tagline}</p>
+        {
+          d.links.length > 0 && (
+            <div class="project__links">
+              {d.links.map((l) => (
+                <a class="button button--light" href={l.url} rel="noopener">
+                  {l.label}
+                </a>
+              ))}
+            </div>
+          )
+        }
       </div>
     </header>
 

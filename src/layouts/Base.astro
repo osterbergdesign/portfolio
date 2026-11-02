@@ -11,7 +11,7 @@ interface Props {
 }
 
 const about = await getAbout();
-const { name, email, phone, location, linkedin } = about.data;
+const { name, email, phone, location, linkedin, github } = about.data;
 const siteTitle = `${name} — Industrial & technical design`;
 const { title, description = `Portfolio of ${name}: product design, prototyping, interaction and visualization.`, image } = Astro.props;
 const fullTitle = title ? `${title} — ${name}` : siteTitle;
@@ -99,6 +99,7 @@ const year = new Date().getFullYear();
           <div><dt>Based in</dt><dd>{location}</dd></div>
           <div><dt>Consulting</dt><dd><a href="/consulting/">3D printing and design jobs</a></dd></div>
           {linkedin && (<div><dt>LinkedIn</dt><dd><a href={linkedin}>Profile</a></dd></div>)}
+          {github && (<div><dt>GitHub</dt><dd><a href={github}>{github.replace(/^https?:\/\/(www\.)?github\.com\//, '')}</a></dd></div>)}
         </dl>
         <div class="site-footer__base">
           <span class="site-footer__mark"><Logo /></span>
