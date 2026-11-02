@@ -10,4 +10,19 @@ services:
     ports:
       # Open http://<server-ip>:8080 — change the left number if 8080 is taken.
       - "8080:80"
+    depends_on:
+      - contact
+    restart: unless-stopped
+
+  # Sends the contact form on /consulting/ to your inbox. Settings live in .env (copy .env.example).
+  # Without a .env the site still works; the form then offers to send an ordinary email instead.
+  contact:
+    build: ./contact
+    image: osterberg-contact:latest
+    container_name: osterberg-contact
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      SITE_NAME: osterbergdesign.site
     restart: unless-stopped

@@ -3,17 +3,18 @@ title: Footprint
 tagline: Cricket protein for everyday use — and a production system that keeps running in a crisis.
 summary: A protein product that doubles as crisis preparedness, and the farm-to-factory system behind it — designed to switch from consumer tins to 10 kg sacks for municipalities and the Armed Forces.
 year: 2025
-context: A0013A, group project
+context: A0013A Product and Production Design
 team: Group of 4
+role: Project lead for the ideation phase; co-wrote the project memos and helped make the labels and build the physical prototypes
 disciplines: [Product design, Materials & production, Prototyping]
-tools: [Ansys Granta EduPack, Cost calculation, Production flow & layout, Physical prototyping]
+tools: [3D printing, Foam modelling, Physical prototyping, Ansys Granta EduPack, Cost calculation, Production flow & layout]
 highlights:
+  - "My part: project lead for the ideation phase, and hands-on work on the labels and the physical prototypes — 3D printing, foam and model making"
   - "Everyday product: a 200 g tin with 90 g protein and 1,200 kcal, 39 SEK, at least two years' shelf life at room temperature"
   - Breeding in refurbished 12 m containers on 27 farms — about 110 containers feeding one central factory
   - "Circular set-up: farm residues feed the crickets, and cricket waste goes back to the farm as fertiliser and feed"
   - "Crisis mode re-uses the same line: two machines idle, and output switches from 2,000 tins a day to 40 × 10 kg sacks"
   - Packaging material chosen in EduPack; full cost calculation from materials and night-shift wages to retail price
-  - Physical prototypes of the packaging and the cricket breeding box
 cover: ./cover.jpg
 coverPosition: 70% 50%
 coverAlt: Two white shipping containers printed with the Footprint logo in a field beside a red barn at sunset
@@ -56,7 +57,9 @@ The pre-study started with home growing; an informal interview with a gardener c
 
 ## Four concepts, one matrix
 
-A workshop with a group from another field (braindrawing, then open discussion) and individual thumbnails led to four concepts: protein powder, protein bar, jerky and an additive. We built four prototypes and scored them in a weighted matrix with three external participants from the target group, using the critical functions from the pre-study as criteria. The additive — a bouillon-style puck you crumble into food or eat as it is — won.
+Each of us led one of the project's five phases. I led the ideation phase: structuring the work, setting deadlines and making sure we kept them. The phase opened with a workshop with a group from another field — braindrawing, then open discussion — followed by individual thumbnails.
+
+In concept development we sorted the thumbnails into four concepts — protein powder, protein bar, jerky and an additive — built four prototypes and scored them in a weighted matrix with three external participants from the target group, using the critical functions from the pre-study as criteria. The additive — a bouillon-style puck you crumble into food or eat as it is — won.
 
 ## Designing the system, not just the product
 
@@ -73,4 +76,4 @@ When crisis hits, the customer changes from the active individual to MSB, munici
 
 ## Result
 
-Digital renders of the tin and the containers, and physical prototypes of the packaging and a breeding box model for the final presentation.
+Digital renders of the tin and the containers, and physical prototypes for the final presentation: the packaging, its labels and a model of the breeding box. I was part of the hands-on work of making the labels and building those prototypes, trying 3D printing, foam and general model making along the way. I also co-wrote all of the project memos.

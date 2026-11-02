@@ -18,6 +18,7 @@ cover: ./cover.jpg
 coverAlt: Describe the cover image for people who can't see it
 coverPosition: 50% 50%       # which part of the cover to keep when cards crop it
 accent: rust                 # rust, navy, olive, mustard or sand
+category: work               # work = academic/client project, hobby = shows under the Hobby projects tab
 featured: false              # true = eligible for the home page (first three by order)
 order: 10                    # lower comes first
 draft: true                  # remove this line when the project is ready to publish

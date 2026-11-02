@@ -21,6 +21,7 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const nav = [
   { href: '/projects/', label: 'Projects', active: path.startsWith('/projects') },
+  { href: '/consulting/', label: 'Consulting', active: path.startsWith('/consulting') },
   { href: '/about/', label: 'About', active: path.startsWith('/about') },
 ];
 const year = new Date().getFullYear();
@@ -44,6 +45,19 @@ const year = new Date().getFullYear();
     <meta property="og:url" content={canonical} />
     {ogImage && <meta property="og:image" content={ogImage} />}
     <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>
+      // Scroll motion is opt-in: content is only hidden for reveal animations once this class is set,
+      // and the class is dropped again if the motion script hasn't started within 2.5 s.
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.classList.add('motion');
+        setTimeout(function () {
+          if (!window.__motion) {
+            window.__motionOff = true;
+            document.documentElement.classList.remove('motion');
+          }
+        }, 2500);
+      }
+    </script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -83,6 +97,7 @@ const year = new Date().getFullYear();
         <dl class="site-footer__meta">
           {phone && (<div><dt>Phone</dt><dd><a href={`tel:${phone.replace(/\s/g, '')}`}>{phone}</a></dd></div>)}
           <div><dt>Based in</dt><dd>{location}</dd></div>
+          <div><dt>Consulting</dt><dd><a href="/consulting/">3D printing and design jobs</a></dd></div>
           {linkedin && (<div><dt>LinkedIn</dt><dd><a href={linkedin}>Profile</a></dd></div>)}
         </dl>
         <div class="site-footer__base">
@@ -91,5 +106,9 @@ const year = new Date().getFullYear();
         </div>
       </div>
     </footer>
+
+    <script>
+      import '../scripts/motion.js';
+    </script>
   </body>
 </html>

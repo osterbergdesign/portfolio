@@ -30,13 +30,13 @@ skills:
   - group: Electronics
     items: [PCB design]
   - group: Prototyping
-    items: [Clay modelling, Physical models and mock-ups, Packaging prototypes]
+    items: [3D printing, Clay modelling, Foam modelling, Physical models and mock-ups]
   - group: User research and interaction
     items: [Figma, Usability testing, Eye tracking (Tobii Pro Glasses 3), Surveys and interviews, Task analysis]
   - group: Engineering and production
     items: [Material and process selection (Ansys Granta EduPack), Cost calculation, Production flow and layout]
   - group: Graphic and brand
-    items: [Identity systems, Typography]
+    items: [Adobe Illustrator, Adobe Photoshop, Identity systems, Typography]
 ---
 
 I'm an industrial design engineering student at Luleå University of Technology. The problems I enjoy most don't stay inside one discipline: a microphone that has to feel like Motown and still fit a display, a dial and a second mic; a protein product that only works if the factory behind it can switch to crisis mode; a vending machine that turns out to be a question of where people look.

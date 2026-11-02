@@ -11,7 +11,7 @@ const last = rest.join(' ');
 ---
 
 <Base title="About" description={`${d.name} — ${d.headline}. CV, skills and contact details.`}>
-  <section class="about-hero container">
+  <section class="about-hero container" data-progress="exit">
     <h1 class="about-hero__name"><span>{first}</span><span>{last}.</span></h1>
     <div class="about-hero__meta">
       <p class="about-hero__headline">{d.headline}</p>
@@ -25,7 +25,7 @@ const last = rest.join(' ');
     </div>
     {
       d.availability && (
-        <aside class="about-availability accent-rust">
+        <aside class="about-availability accent-rust" data-reveal="wipe">
           <p class="about-availability__title">{d.availability}</p>
           <div class="button-row">
             <a class="button button--light" href={`mailto:${d.email}`}>Email me</a>
@@ -37,11 +37,11 @@ const last = rest.join(' ');
   </section>
 
   <section class="container skills" aria-labelledby="skills-title">
-    <h2 id="skills-title" class="section-title">Skills and tools</h2>
+    <h2 id="skills-title" class="section-title" data-reveal="rise">Skills and tools</h2>
     <dl class="skills__grid">
       {
         d.skills.map((s) => (
-          <div class="skills__group">
+          <div class="skills__group" data-reveal="rise">
             <dt>{s.group}</dt>
             <dd>
               <ul class="tag-list">
@@ -63,10 +63,10 @@ const last = rest.join(' ');
         .filter((col) => col.items.length > 0)
         .map((col) => (
           <div class="cv__col">
-            <h2 class="section-title">{col.title}</h2>
+            <h2 class="section-title" data-reveal="rise">{col.title}</h2>
             <ol class="cv__list">
               {col.items.map((item) => (
-                <li>
+                <li data-reveal="rise">
                   <p class="cv__period">{item.period}</p>
                   <div>
                     <h3>{item.title}</h3>
@@ -82,7 +82,7 @@ const last = rest.join(' ');
   </section>
 
   <section class="container contact" aria-labelledby="contact-title">
-    <h2 id="contact-title" class="section-title">Contact</h2>
+    <h2 id="contact-title" class="section-title" data-reveal="rise">Contact</h2>
     <dl class="contact__list">
       <div><dt>Email</dt><dd><a href={`mailto:${d.email}`}>{d.email}</a></dd></div>
       {d.phone && <div><dt>Phone</dt><dd><a href={`tel:${d.phone.replace(/\s/g, '')}`}>{d.phone}</a></dd></div>}

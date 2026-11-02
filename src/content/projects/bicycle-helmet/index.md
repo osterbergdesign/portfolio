@@ -5,9 +5,11 @@ summary: A design translation table, CES EduPack charts and process reasoning fo
 year: 2024
 context: T0021T Materials and Manufacturing Methods
 team: Group of 3
+role: Project leader — organised the work and made the final calls
 disciplines: [Materials & production]
 tools: [Ansys Granta EduPack (CES), Ashby charts]
 highlights:
+  - "My part: project leader — organised the group's work and made the final calls"
   - Polycarbonate shell, vacuum-formed — the highest impact strength among the shortlisted plastics
   - EPS liner moulded as one piece, because glue lines create weak points
   - Open-cell PU padding, cut on a CNC hot-wire cutter from bought-in sheet
@@ -38,7 +40,7 @@ For each part of a helmet, translate its function into objectives, constraints a
 
 Wherever we could, constraints came from materials that already work in the field: shell stiffness and toughness limits from the PET, PC and ABS used in today's helmets, and strap properties from seatbelt polyester. Every part shared a base set of requirements — UV resistant, safe against skin, insoluble in water, easy to mass-produce, and stable mechanical properties from −30 °C to 50 °C, because Swedish winters are cold.
 
-We then plotted the survivors on Ashby charts — for the foams, compressive modulus against elastic stored energy — ranked them, and compared the last two or three by hand.
+We then plotted the survivors on Ashby charts — for the foams, compressive modulus against elastic stored energy — ranked them, and compared the last two or three by hand. As project leader I organised the work and made the final call when a shortlist came down to those last candidates.
 
 ## Decisions
 

@@ -36,6 +36,8 @@ const projects = defineCollection({
       /** Which part of the cover to keep when cards crop it, as CSS object-position, e.g. "left center" or "70% 50%". */
       coverPosition: z.string().default('50% 50%'),
       accent: z.enum(['rust', 'navy', 'olive', 'mustard', 'sand']).default('rust'),
+      /** "work" for academic and client projects, "hobby" for your own projects. Decides which tab it appears under. */
+      category: z.enum(['work', 'hobby']).default('work'),
       /** Featured projects appear on the home page (the first three by order). */
       featured: z.boolean().default(false),
       /** Lower numbers come first. */
@@ -79,4 +81,25 @@ const about = defineCollection({
   }),
 });
 
-export const collections = { projects, about };
+/** Consulting page: src/content/consulting.md */
+const consulting = defineCollection({
+  loader: glob({ pattern: 'consulting.md', base: './src/content', generateId: () => 'consulting' }),
+  schema: z.object({
+    title: z.string(),
+    lede: z.string(),
+    services: z
+      .array(
+        z.object({
+          title: z.string(),
+          text: z.string(),
+          accent: z.enum(['rust', 'navy', 'olive', 'mustard', 'sand']).default('rust'),
+        }),
+      )
+      .min(1),
+    steps: z.array(z.object({ title: z.string(), text: z.string() })).default([]),
+    /** Choices in the form's "What is it about?" menu. */
+    topics: z.array(z.string()).min(1),
+  }),
+});
+
+export const collections = { projects, about, consulting };

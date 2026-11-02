@@ -22,6 +22,7 @@ const sizes =
   class:list={['card', `card--${size}`, `accent-${accent}`]}
   data-disciplines={disciplines.map(slugify).join(' ')}
   style={`--cover-position: ${coverPosition}`}
+  data-reveal="wipe"
 >
   <a class="card__link" href={`/projects/${project.id}/`}>
     <div class="card__media">

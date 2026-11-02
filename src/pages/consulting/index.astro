@@ -1,0 +1,176 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getAbout, getConsulting } from '../../lib/content';
+
+const about = await getAbout();
+const consulting = await getConsulting();
+const { Content } = await render(consulting);
+const d = consulting.data;
+const { email, phone } = about.data;
+const shapes = ['circle', 'square', 'triangle', 'quarter'];
+---
+
+<Base title={d.title} description={d.lede}>
+  <section class="page-head container">
+    <h1 class="page-title" data-reveal="rise">{d.title}</h1>
+    <p class="page-lede">{d.lede}</p>
+    <div class="button-row">
+      <a class="button" href="#contact">Send an enquiry</a>
+    </div>
+  </section>
+
+  <section class="container services" aria-labelledby="services-title">
+    <h2 id="services-title" class="visually-hidden">Services</h2>
+    <ul class="services__grid">
+      {
+        d.services.map((s, i) => (
+          <li class={`service accent-${s.accent}`} data-reveal="wipe">
+            <span class={`shape shape--${shapes[i % shapes.length]}`} aria-hidden="true" />
+            <h3 class="service__title">{s.title}</h3>
+            <p>{s.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  {
+    d.steps.length > 0 && (
+      <section class="container steps" aria-labelledby="steps-title">
+        <h2 id="steps-title" class="section-title" data-reveal="rise">How it works</h2>
+        <ol class="steps__list">
+          {d.steps.map((step, i) => (
+            <li class="steps__item" data-reveal="rise">
+              <span class="steps__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )
+  }
+
+  <section class="container enquiry" id="contact" aria-labelledby="enquiry-title">
+    <div class="enquiry__intro" data-reveal="rise">
+      <h2 id="enquiry-title" class="section-title">Tell me about the job</h2>
+      <div class="prose">
+        <Content />
+      </div>
+      <dl class="enquiry__direct">
+        <div>
+          <dt>Rather email?</dt>
+          <dd><a href={`mailto:${email}?subject=${encodeURIComponent('Consulting enquiry')}`}>{email}</a></dd>
+        </div>
+        {
+          phone && (
+            <div>
+              <dt>Phone</dt>
+              <dd><a href={`tel:${phone.replace(/\s/g, '')}`}>{phone}</a></dd>
+            </div>
+          )
+        }
+      </dl>
+    </div>
+
+    <div class="enquiry__panel" data-reveal="wipe">
+      <form class="contact-form" action="/api/contact" method="post" data-email={email}>
+        <div class="field">
+          <label for="cf-name">Name</label>
+          <input id="cf-name" name="name" type="text" autocomplete="name" required maxlength="100" />
+        </div>
+        <div class="field">
+          <label for="cf-email">Email</label>
+          <input id="cf-email" name="email" type="email" autocomplete="email" required maxlength="254" />
+        </div>
+        <div class="field">
+          <label for="cf-topic">What is it about?</label>
+          <select id="cf-topic" name="topic">
+            {d.topics.map((t) => <option>{t}</option>)}
+          </select>
+        </div>
+        <div class="field">
+          <label for="cf-message">Message</label>
+          <textarea
+            id="cf-message"
+            name="message"
+            rows="7"
+            required
+            minlength="10"
+            maxlength="5000"
+            aria-describedby="cf-message-hint"></textarea>
+          <p class="field__hint" id="cf-message-hint">What you need, rough size or quantity, and when you need it. Files can follow by email once I reply.</p>
+        </div>
+        <div class="contact-form__trap" aria-hidden="true">
+          <label for="cf-company">Leave this empty</label>
+          <input id="cf-company" name="company" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+        <div class="contact-form__actions">
+          <button class="button" type="submit">Send message</button>
+          <p class="contact-form__status" role="status" aria-live="polite"></p>
+        </div>
+        <p class="field__hint">Your message goes straight to my inbox. Nothing is stored on this site.</p>
+      </form>
+
+      <div class="contact-success" hidden tabindex="-1">
+        <span class="shape shape--circle" aria-hidden="true"></span>
+        <p class="contact-success__title">Thanks — your message is on its way.</p>
+        <p>I'll reply to the email address you gave.</p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Sends the form without leaving the page. Without JavaScript the form still posts normally.
+  const form = document.querySelector<HTMLFormElement>('.contact-form');
+  const success = document.querySelector<HTMLElement>('.contact-success');
+  if (form && success) {
+    const started = Date.now();
+    const status = form.querySelector<HTMLElement>('.contact-form__status')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+
+    const showFallback = (data: Record<string, string>) => {
+      // The mail service isn't reachable: offer to send the same text as an ordinary email.
+      const subject = `${data.topic || 'Consulting'} — ${data.name}`;
+      const link = document.createElement('a');
+      link.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(data.message)}`;
+      link.textContent = 'Send it as an email instead';
+      status.dataset.state = 'error';
+      status.replaceChildren("The form couldn't send your message right now. ", link, '.');
+    };
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
+      data.elapsed = String(Date.now() - started);
+      button.disabled = true;
+      status.dataset.state = 'busy';
+      status.textContent = 'Sending…';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const body = await res.json().catch(() => ({}));
+        if (res.ok && body.ok) {
+          form.reset();
+          form.hidden = true;
+          success.hidden = false;
+          success.focus();
+        } else if (res.status === 400 || res.status === 429) {
+          status.dataset.state = 'error';
+          status.textContent = body.error ?? 'Please check the form and try again.';
+        } else {
+          showFallback(data);
+        }
+      } catch {
+        showFallback(data);
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
+</script>

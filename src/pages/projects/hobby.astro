@@ -1,0 +1,12 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectListing from '../../components/ProjectListing.astro';
+import { getProjects } from '../../lib/content';
+
+const work = await getProjects('work');
+const hobby = await getProjects('hobby');
+---
+
+<Base title="Hobby projects" description="Things I design and build in my own time.">
+  <ProjectListing projects={hobby} active="hobby" workCount={work.length} hobbyCount={hobby.length} />
+</Base>

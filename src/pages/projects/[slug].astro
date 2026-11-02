@@ -7,20 +7,24 @@ import { getProjects, widthsFor, type Project } from '../../lib/content';
 
 export const getStaticPaths = (async () => {
   const projects = await getProjects();
-  return projects.map((project, i) => ({
-    params: { slug: project.id },
-    props: { project, next: projects[(i + 1) % projects.length] },
-  }));
+  return projects.map((project) => {
+    // "Next project" stays within the same tab: design work leads to design work, hobby to hobby.
+    const sameKind = projects.filter((p) => p.data.category === project.data.category);
+    const i = sameKind.indexOf(project);
+    const next = sameKind.length > 1 ? sameKind[(i + 1) % sameKind.length] : undefined;
+    return { params: { slug: project.id }, props: { project, next } };
+  });
 }) satisfies GetStaticPaths;
 
 interface Props {
   project: Project;
-  next: Project;
+  next?: Project;
 }
 
 const { project, next } = Astro.props;
 const { Content } = await render(project);
 const d = project.data;
+const back = d.category === 'hobby' ? { href: '/projects/hobby/', label: 'All hobby projects' } : { href: '/projects/', label: 'All projects' };
 
 const facts = [
   { label: 'Year', value: d.year?.toString() },
@@ -33,16 +37,19 @@ const facts = [
 
 <Base title={d.title} description={d.summary} image={d.cover.src}>
   <article class={`project accent-${d.accent}`}>
-    <header class="project__head">
+    <div class="progress-bar" aria-hidden="true"></div>
+    <header class="project__head" data-progress="exit">
       <div class="container">
-        <a class="project__back" href="/projects/">All projects</a>
+        <a class="project__back" href={back.href}>{back.label}</a>
         <h1 class="project__title">{d.title}</h1>
         <p class="project__tagline">{d.tagline}</p>
       </div>
     </header>
 
     <div class="container project__cover">
-      <Image src={d.cover} alt={d.coverAlt} widths={widthsFor(d.cover)} sizes="(min-width: 1320px) 1280px, 100vw" loading="eager" />
+      <div class="project__cover-frame" data-progress="through">
+        <Image src={d.cover} alt={d.coverAlt} widths={widthsFor(d.cover)} sizes="(min-width: 1320px) 1280px, 100vw" loading="eager" />
+      </div>
     </div>
 
     <div class="container project__layout">
@@ -72,7 +79,7 @@ const facts = [
       <div class="project__main">
         {
           d.highlights.length > 0 && (
-            <section class="glance" aria-labelledby="glance-title">
+            <section class="glance" aria-labelledby="glance-title" data-reveal="wipe">
               <h2 id="glance-title">At a glance</h2>
               <ul>
                 {d.highlights.map((h) => <li>{h}</li>)}
@@ -90,13 +97,15 @@ const facts = [
       d.gallery.length > 0 && (
         <section class="container gallery" aria-label="Images">
           {d.gallery.map((g) => (
-            <figure class:list={['gallery__item', { 'gallery__item--wide': g.wide }]}>
-              <Image
-                src={g.src}
-                alt={g.alt}
-                widths={widthsFor(g.src)}
-                sizes={g.wide ? '(min-width: 1320px) 1280px, 100vw' : '(min-width: 800px) 50vw, 100vw'}
-              />
+            <figure class:list={['gallery__item', { 'gallery__item--wide': g.wide }]} data-reveal="wipe">
+              <div class="gallery__media">
+                <Image
+                  src={g.src}
+                  alt={g.alt}
+                  widths={widthsFor(g.src)}
+                  sizes={g.wide ? '(min-width: 1320px) 1280px, 100vw' : '(min-width: 800px) 50vw, 100vw'}
+                />
+              </div>
               {g.caption && <figcaption>{g.caption}</figcaption>}
             </figure>
           ))}
@@ -104,12 +113,16 @@ const facts = [
       )
     }
 
-    <nav class={`next-project accent-${next.data.accent}`} aria-label="Next project">
-      <a class="container next-project__link" href={`/projects/${next.id}/`}>
-        <span class="next-project__label">Next project</span>
-        <span class="next-project__title">{next.data.title}</span>
-        <span class="next-project__tagline">{next.data.tagline}</span>
-      </a>
-    </nav>
+    {
+      next && (
+        <nav class={`next-project accent-${next.data.accent}`} aria-label="Next project" data-progress="through">
+          <a class="container next-project__link" href={`/projects/${next.id}/`}>
+            <span class="next-project__label">Next project</span>
+            <span class="next-project__title">{next.data.title}</span>
+            <span class="next-project__tagline">{next.data.tagline}</span>
+          </a>
+        </nav>
+      )
+    }
   </article>
 </Base>
