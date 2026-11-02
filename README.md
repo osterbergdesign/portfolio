@@ -58,6 +58,7 @@ The settings are checked at build time, so a typo (for example a missing `coverA
 | `accent` | Colour field for the card and page header: `rust`, `navy`, `olive`, `mustard`, `sand` |
 | `category` | `work` (default) for academic and client projects, `hobby` for your own — decides the tab it's listed under |
 | `featured`, `order` | Home page selection (first three featured by order) and sort order |
+| `film` | Optional film shown full width under the story: `src`, `poster` and `caption` (files go in `public/videos/`) |
 | `gallery` | Images under the story; `wide: true` spans the full width |
 | `draft` | Visible in `npm run dev`, left out of the built site |
 
@@ -67,10 +68,19 @@ Set `category: hobby` in a project's settings and it moves to the **Hobby projec
 
 ### Video
 
-Markdown accepts plain HTML, so a product film can go straight into a project:
+The easiest way to show a product film is the `film` setting — The Marvin uses it:
+
+```yaml
+film:
+  src: /videos/the-marvin.mp4
+  poster: /videos/the-marvin-poster.jpg
+  caption: What the film shows.
+```
+
+Markdown also accepts plain HTML, so a smaller clip can go straight into the story text:
 
 ```html
-<video src="/videos/the-marvin.mp4" poster="/videos/the-marvin.jpg" controls playsinline preload="metadata"></video>
+<video src="/videos/my-clip.mp4" poster="/videos/my-clip-poster.jpg" controls playsinline preload="metadata"></video>
 ```
 
 Put video files in `public/videos/`. Export them as MP4 (H.264) at 1080p; keep each file under 25 MB if you upload through the GitHub website (100 MB is GitHub's hard limit). The poster is the still shown before the film plays.

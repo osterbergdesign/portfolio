@@ -94,6 +94,18 @@ const facts = [
     </div>
 
     {
+      d.film && (
+        <section class="container film" aria-labelledby="film-title">
+          <h2 id="film-title" class="section-title" data-reveal="rise">The film</h2>
+          <figure class="film__frame" data-reveal="wipe">
+            <video src={d.film.src} poster={d.film.poster} controls playsinline preload="none"></video>
+            {d.film.caption && <figcaption>{d.film.caption}</figcaption>}
+          </figure>
+        </section>
+      )
+    }
+
+    {
       d.gallery.length > 0 && (
         <section class="container gallery" aria-label="Images">
           {d.gallery.map((g) => (

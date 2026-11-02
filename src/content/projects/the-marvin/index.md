@@ -14,11 +14,16 @@ highlights:
   - Detail design placed the display, control dial and lav-mic dock in a 316 × 128 mm body
   - "Spec targets: USB‑C and 1/4\" outputs, 48-hour battery"
   - Material system built for contrast — polished stainless steel, walnut and a 60s/70s knitted fabric
+  - A one-minute product film to finish — the materials, the exploded assembly, the lav mic in use and the EQ modes
 cover: ./cover.jpg
 coverAlt: The Marvin microphone floating in a warm, wood-panelled 1970s recording studio
 accent: rust
 featured: true
 order: 1
+film:
+  src: /videos/the-marvin.mp4
+  poster: /videos/the-marvin-poster.jpg
+  caption: One minute — material close-ups, the exploded assembly, the lav mic out in the field, the EQ modes and the colour options.
 gallery:
   - src: ./process-board.jpg
     alt: Process board showing moodboard, ideation sketches, two concepts with a clay study, CAD views, an exploded view and material swatches
@@ -61,3 +66,5 @@ Textures were set up for contrast: a polished stainless steel frame and dial aro
 ## Visualization
 
 The product is named after Marvin Gaye, and the renders borrow the earthy tones and swagger of his albums. Instead of a white background, the final images put the mic in a period recording studio, so the mood does as much work as the form.
+
+The project ends in a one-minute product film: the materials up close, the assembly coming apart, the lav mic in use outdoors, and the EQ modes on the display.

@@ -334,6 +334,11 @@ p + p { margin-top: 1em; }
 .prose td { border-bottom: 1px solid var(--sand); padding: 10px 14px 10px 0; vertical-align: top; }
 .prose--large p { font-size: clamp(18px, 1.6vw, 20px); line-height: 1.6; }
 
+.film { padding-bottom: clamp(40px, 5vw, 72px); }
+.film__frame { margin: 24px 0 0; }
+.film__frame video { width: 100%; aspect-ratio: 16 / 9; background: var(--ink); }
+.film__frame figcaption { margin-top: 10px; font-size: 14px; line-height: 1.45; color: var(--ink-2); max-width: 70ch; }
+
 .gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2vw, 28px); padding-bottom: var(--space); }
 .gallery__item { margin: 0; }
 .gallery__item--wide { grid-column: 1 / -1; }

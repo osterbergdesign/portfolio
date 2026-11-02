@@ -44,6 +44,14 @@ const projects = defineCollection({
       order: z.number().default(100),
       /** Drafts show up in `npm run dev` but are left out of the built site. */
       draft: z.boolean().default(false),
+      /** A film shown full width under the story. Put the files in public/videos/. */
+      film: z
+        .object({
+          src: z.string(),
+          poster: z.string().optional(),
+          caption: z.string().optional(),
+        })
+        .optional(),
       gallery: z
         .array(
           z.object({
