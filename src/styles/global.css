@@ -60,7 +60,7 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
-img { max-width: 100%; height: auto; display: block; }
+img, video { max-width: 100%; height: auto; display: block; }
 a { color: inherit; text-decoration-thickness: 2px; text-underline-offset: 3px; }
 h1, h2, h3 { margin: 0; text-wrap: balance; }
 p { margin: 0; }
@@ -328,6 +328,7 @@ p + p { margin-top: 1em; }
 .prose strong { font-weight: 700; }
 .prose a { color: var(--rust); }
 .prose img { margin-block: 1.5em; }
+.prose video { width: 100%; margin-block: 1.5em; background: var(--ink); }
 .prose table { width: 100%; border-collapse: collapse; font-size: 15px; line-height: 1.45; margin-block: 1.6em; display: block; overflow-x: auto; }
 .prose th { text-align: left; font-weight: 700; border-bottom: 2px solid var(--ink); padding: 8px 14px 8px 0; white-space: nowrap; }
 .prose td { border-bottom: 1px solid var(--sand); padding: 10px 14px 10px 0; vertical-align: top; }

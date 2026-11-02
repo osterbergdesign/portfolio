@@ -70,10 +70,10 @@ Set `category: hobby` in a project's settings and it moves to the **Hobby projec
 Markdown accepts plain HTML, so a product film can go straight into a project:
 
 ```html
-<video src="/videos/the-marvin.mp4" controls playsinline poster="/videos/the-marvin.jpg"></video>
+<video src="/videos/the-marvin.mp4" poster="/videos/the-marvin.jpg" controls playsinline preload="metadata"></video>
 ```
 
-Put video files in `public/videos/`.
+Put video files in `public/videos/`. Export them as MP4 (H.264) at 1080p; keep each file under 25 MB if you upload through the GitHub website (100 MB is GitHub's hard limit). The poster is the still shown before the film plays.
 
 ## Edit the About page
 
