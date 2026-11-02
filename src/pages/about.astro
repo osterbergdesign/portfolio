@@ -1,6 +1,7 @@
 ---
 import { render } from 'astro:content';
 import Base from '../layouts/Base.astro';
+import Signature from '../components/Signature.astro';
 import { getAbout } from '../lib/content';
 
 const about = await getAbout();
@@ -20,8 +21,11 @@ const last = rest.join(' ');
   </section>
 
   <section class="container about-intro">
-    <div class="prose prose--large">
-      <Content />
+    <div>
+      <div class="prose prose--large">
+        <Content />
+      </div>
+      <Signature class="about-signature" />
     </div>
     {
       d.availability && (

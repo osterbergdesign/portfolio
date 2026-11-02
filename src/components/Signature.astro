@@ -1,0 +1,15 @@
+---
+/**
+ * Max's handwritten signature (public/signature.png), drawn in the current text colour.
+ * It "writes" itself in from left to right when it scrolls into view.
+ */
+import { getAbout } from '../lib/content';
+
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+const { name } = (await getAbout()).data;
+---
+
+<span class:list={['signature', className]} role="img" aria-label={`Signed, ${name}`} data-reveal="sign"></span>
