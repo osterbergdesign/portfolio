@@ -22,6 +22,9 @@ category: work               # work = academic/client project, hobby = shows und
 featured: false              # true = eligible for the home page (first three by order)
 order: 10                    # lower comes first
 draft: true                  # remove this line when the project is ready to publish
+# links:                     # optional buttons under the title
+#   - label: View on GitHub
+#     url: https://github.com/osterbergdesign/your-repo
 # film:                      # optional product film, shown full width under the story
 #   src: /videos/desk-lamp.mp4         # put the files in public/videos/
 #   poster: /videos/desk-lamp-poster.jpg

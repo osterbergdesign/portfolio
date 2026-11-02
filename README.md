@@ -58,6 +58,7 @@ The settings are checked at build time, so a typo (for example a missing `coverA
 | `accent` | Colour field for the card and page header: `rust`, `navy`, `olive`, `mustard`, `sand` |
 | `category` | `work` (default) for academic and client projects, `hobby` for your own — decides the tab it's listed under |
 | `featured`, `order` | Home page selection (first three featured by order) and sort order |
+| `links` | Buttons under the title, e.g. `- label: View on GitHub` / `url: https://github.com/...` |
 | `film` | Optional film shown full width under the story: `src`, `poster` and `caption` (files go in `public/videos/`) |
 | `gallery` | Images under the story; `wide: true` spans the full width |
 | `draft` | Visible in `npm run dev`, left out of the built site |
