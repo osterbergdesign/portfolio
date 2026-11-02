@@ -1,0 +1,115 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getProjects, widthsFor, type Project } from '../../lib/content';
+
+export const getStaticPaths = (async () => {
+  const projects = await getProjects();
+  return projects.map((project, i) => ({
+    params: { slug: project.id },
+    props: { project, next: projects[(i + 1) % projects.length] },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  project: Project;
+  next: Project;
+}
+
+const { project, next } = Astro.props;
+const { Content } = await render(project);
+const d = project.data;
+
+const facts = [
+  { label: 'Year', value: d.year?.toString() },
+  { label: 'Context', value: d.context },
+  { label: 'Team', value: d.team },
+  { label: 'My role', value: d.role },
+  { label: 'Disciplines', value: d.disciplines.join(', ') },
+].filter((f): f is { label: string; value: string } => Boolean(f.value));
+---
+
+<Base title={d.title} description={d.summary} image={d.cover.src}>
+  <article class={`project accent-${d.accent}`}>
+    <header class="project__head">
+      <div class="container">
+        <a class="project__back" href="/projects/">All projects</a>
+        <h1 class="project__title">{d.title}</h1>
+        <p class="project__tagline">{d.tagline}</p>
+      </div>
+    </header>
+
+    <div class="container project__cover">
+      <Image src={d.cover} alt={d.coverAlt} widths={widthsFor(d.cover)} sizes="(min-width: 1320px) 1280px, 100vw" loading="eager" />
+    </div>
+
+    <div class="container project__layout">
+      <aside class="project__facts" aria-label="Project facts">
+        <dl>
+          {
+            facts.map((f) => (
+              <div>
+                <dt>{f.label}</dt>
+                <dd>{f.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+        {
+          d.tools.length > 0 && (
+            <>
+              <p class="project__facts-label">Tools and methods</p>
+              <ul class="tag-list">
+                {d.tools.map((t) => <li>{t}</li>)}
+              </ul>
+            </>
+          )
+        }
+      </aside>
+
+      <div class="project__main">
+        {
+          d.highlights.length > 0 && (
+            <section class="glance" aria-labelledby="glance-title">
+              <h2 id="glance-title">At a glance</h2>
+              <ul>
+                {d.highlights.map((h) => <li>{h}</li>)}
+              </ul>
+            </section>
+          )
+        }
+        <div class="prose">
+          <Content />
+        </div>
+      </div>
+    </div>
+
+    {
+      d.gallery.length > 0 && (
+        <section class="container gallery" aria-label="Images">
+          {d.gallery.map((g) => (
+            <figure class:list={['gallery__item', { 'gallery__item--wide': g.wide }]}>
+              <Image
+                src={g.src}
+                alt={g.alt}
+                widths={widthsFor(g.src)}
+                sizes={g.wide ? '(min-width: 1320px) 1280px, 100vw' : '(min-width: 800px) 50vw, 100vw'}
+              />
+              {g.caption && <figcaption>{g.caption}</figcaption>}
+            </figure>
+          ))}
+        </section>
+      )
+    }
+
+    <nav class={`next-project accent-${next.data.accent}`} aria-label="Next project">
+      <a class="container next-project__link" href={`/projects/${next.id}/`}>
+        <span class="next-project__label">Next project</span>
+        <span class="next-project__title">{next.data.title}</span>
+        <span class="next-project__tagline">{next.data.tagline}</span>
+      </a>
+    </nav>
+  </article>
+</Base>

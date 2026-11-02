@@ -1,0 +1,93 @@
+---
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { getAbout } from '../lib/content';
+
+const about = await getAbout();
+const { Content } = await render(about);
+const d = about.data;
+const [first, ...rest] = d.name.split(' ');
+const last = rest.join(' ');
+---
+
+<Base title="About" description={`${d.name} — ${d.headline}. CV, skills and contact details.`}>
+  <section class="about-hero container">
+    <h1 class="about-hero__name"><span>{first}</span><span>{last}.</span></h1>
+    <div class="about-hero__meta">
+      <p class="about-hero__headline">{d.headline}</p>
+      <p>{d.location}</p>
+    </div>
+  </section>
+
+  <section class="container about-intro">
+    <div class="prose prose--large">
+      <Content />
+    </div>
+    {
+      d.availability && (
+        <aside class="about-availability accent-rust">
+          <p class="about-availability__title">{d.availability}</p>
+          <div class="button-row">
+            <a class="button button--light" href={`mailto:${d.email}`}>Email me</a>
+            {d.cv && <a class="button button--ghost-light" href={d.cv}>Download CV (PDF)</a>}
+          </div>
+        </aside>
+      )
+    }
+  </section>
+
+  <section class="container skills" aria-labelledby="skills-title">
+    <h2 id="skills-title" class="section-title">Skills and tools</h2>
+    <dl class="skills__grid">
+      {
+        d.skills.map((s) => (
+          <div class="skills__group">
+            <dt>{s.group}</dt>
+            <dd>
+              <ul class="tag-list">
+                {s.items.map((i) => <li>{i}</li>)}
+              </ul>
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <section class="container cv" aria-label="Education and experience">
+    {
+      [
+        { title: 'Education', items: d.education },
+        { title: 'Experience', items: d.experience },
+      ]
+        .filter((col) => col.items.length > 0)
+        .map((col) => (
+          <div class="cv__col">
+            <h2 class="section-title">{col.title}</h2>
+            <ol class="cv__list">
+              {col.items.map((item) => (
+                <li>
+                  <p class="cv__period">{item.period}</p>
+                  <div>
+                    <h3>{item.title}</h3>
+                    <p class="cv__place">{item.place}</p>
+                    {item.note && <p class="cv__note">{item.note}</p>}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        ))
+    }
+  </section>
+
+  <section class="container contact" aria-labelledby="contact-title">
+    <h2 id="contact-title" class="section-title">Contact</h2>
+    <dl class="contact__list">
+      <div><dt>Email</dt><dd><a href={`mailto:${d.email}`}>{d.email}</a></dd></div>
+      {d.phone && <div><dt>Phone</dt><dd><a href={`tel:${d.phone.replace(/\s/g, '')}`}>{d.phone}</a></dd></div>}
+      {d.linkedin && <div><dt>LinkedIn</dt><dd><a href={d.linkedin}>{d.linkedin.replace(/^https?:\/\/(www\.)?/, '')}</a></dd></div>}
+      {d.website && <div><dt>Studio</dt><dd><a href={d.website}>{d.website.replace(/^https?:\/\/(www\.)?/, '')}</a></dd></div>}
+    </dl>
+  </section>
+</Base>

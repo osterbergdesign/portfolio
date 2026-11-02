@@ -1,0 +1,59 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getProjects, disciplinesOf, slugify } from '../../lib/content';
+
+const projects = await getProjects();
+const disciplines = disciplinesOf(projects);
+---
+
+<Base title="Projects" description="Product design, prototyping, interaction, materials and visualization projects.">
+  <section class="page-head container">
+    <h1 class="page-title">Projects</h1>
+    <p class="page-lede">
+      {projects.length} projects from Luleå University of Technology and my own studio — product design, interaction,
+      materials, systems and visualization. Each one opens into the process behind it.
+    </p>
+  </section>
+
+  <section class="container" aria-label="Project list">
+    <div class="filter" role="group" aria-label="Filter by discipline" hidden>
+      <button type="button" class="filter__chip" data-filter="all" aria-pressed="true">All</button>
+      {
+        disciplines.map((d) => (
+          <button type="button" class="filter__chip" data-filter={slugify(d)} aria-pressed="false">
+            {d}
+          </button>
+        ))
+      }
+    </div>
+    <p class="filter__status visually-hidden" aria-live="polite"></p>
+
+    <div class="project-grid">
+      {projects.map((p) => <ProjectCard project={p} headingLevel="h2" />)}
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Progressive enhancement: the full list works without JavaScript.
+  const group = document.querySelector<HTMLElement>('.filter');
+  const status = document.querySelector<HTMLElement>('.filter__status');
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('.project-grid .card'));
+  if (group) {
+    group.hidden = false;
+    group.addEventListener('click', (event) => {
+      const button = (event.target as HTMLElement).closest<HTMLButtonElement>('button[data-filter]');
+      if (!button) return;
+      const filter = button.dataset.filter ?? 'all';
+      group.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+      let shown = 0;
+      for (const card of cards) {
+        const match = filter === 'all' || (card.dataset.disciplines ?? '').split(' ').includes(filter);
+        card.hidden = !match;
+        if (match) shown++;
+      }
+      if (status) status.textContent = `Showing ${shown} of ${cards.length} projects`;
+    });
+  }
+</script>

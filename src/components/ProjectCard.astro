@@ -1,0 +1,40 @@
+---
+import { Image } from 'astro:assets';
+import { widthsFor, slugify, type Project } from '../lib/content';
+
+interface Props {
+  project: Project;
+  /** "large" is used for the lead project on the home page. */
+  size?: 'regular' | 'large';
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { project, size = 'regular', headingLevel = 'h3' } = Astro.props;
+const { title, tagline, summary, cover, coverAlt, coverPosition, year, context, accent, disciplines } = project.data;
+const Heading = headingLevel;
+const sizes =
+  size === 'large'
+    ? '(min-width: 1000px) 60vw, 100vw'
+    : '(min-width: 1100px) 33vw, (min-width: 700px) 50vw, 100vw';
+---
+
+<article
+  class:list={['card', `card--${size}`, `accent-${accent}`]}
+  data-disciplines={disciplines.map(slugify).join(' ')}
+  style={`--cover-position: ${coverPosition}`}
+>
+  <a class="card__link" href={`/projects/${project.id}/`}>
+    <div class="card__media">
+      <Image src={cover} alt={coverAlt} widths={widthsFor(cover)} sizes={sizes} loading={size === 'large' ? 'eager' : 'lazy'} />
+    </div>
+    <div class="card__body">
+      <Heading class="card__title">{title}</Heading>
+      <p class="card__tagline">{tagline}</p>
+      {size === 'large' && <p class="card__summary">{summary}</p>}
+      <p class="card__meta">
+        {year && <span>{year}</span>}
+        {context && <span>{context}</span>}
+      </p>
+    </div>
+  </a>
+</article>

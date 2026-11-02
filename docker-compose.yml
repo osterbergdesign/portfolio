@@ -1,0 +1,13 @@
+services:
+  portfolio:
+    build:
+      context: .
+      args:
+        # The address people will use to reach the site.
+        SITE_URL: https://www.osterbergdesign.site
+    image: osterberg-portfolio:latest
+    container_name: osterberg-portfolio
+    ports:
+      # Open http://<server-ip>:8080 — change the left number if 8080 is taken.
+      - "8080:80"
+    restart: unless-stopped

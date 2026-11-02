@@ -1,0 +1,100 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getProjects, getAbout, widthsFor } from '../lib/content';
+
+const projects = await getProjects();
+const about = await getAbout();
+const featured = projects.filter((p) => p.data.featured).slice(0, 3);
+const lead = featured[0];
+const years = projects.map((p) => p.data.year).filter((y): y is number => typeof y === 'number');
+const span = years.length ? `${Math.min(...years)}–${Math.max(...years)}` : '';
+
+const steps = [
+  { shape: 'circle', title: 'Understand', text: 'Observation, surveys, interviews and eye tracking to find the problem worth solving.' },
+  { shape: 'square', title: 'Shape', text: 'Sketching, clay and quick physical models to test form in the hand before CAD.' },
+  { shape: 'triangle', title: 'Engineer', text: 'CAD in Fusion 360 and Alias, PCB design, and material and process selection.' },
+  { shape: 'quarter', title: 'Show', text: 'Renders in Blender and KeyShot, and visual systems that keep the story consistent.' },
+];
+---
+
+<Base description={`${about.data.name} — industrial design engineering student in Luleå. ${about.data.availability ?? ''}`} image={lead?.data.cover.src}>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container hero__grid">
+      <div class="hero__type">
+        <div class="hero__headline">
+          <p class="hero__label">Industrial &amp; technical design</p>
+          <h1 id="hero-title" class="hero__title"><span>Port</span><span>folio.</span></h1>
+        </div>
+        <div class="hero__byline">
+          <p class="hero__name">{about.data.name}</p>
+          {span && <p>Work {span}</p>}
+        </div>
+      </div>
+
+      <div class="hero__panel">
+        <img class="hero__pattern" src="/pattern.svg" alt="" width="800" height="400" />
+        {
+          lead && (
+            <a class="hero__piece" href={`/projects/${lead.id}/`} style={`--cover-position: ${lead.data.coverPosition}`}>
+              <Image
+                src={lead.data.cover}
+                alt={lead.data.coverAlt}
+                widths={widthsFor(lead.data.cover, [600, 900, 1200])}
+                sizes="(min-width: 900px) 40vw, 90vw"
+                loading="eager"
+              />
+              <span class="hero__piece-label">{lead.data.title}</span>
+            </a>
+          )
+        }
+        <p class="hero__caption">Product, interaction and visualization work from academic and client projects</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="intro container" aria-label="Introduction">
+    <p class="intro__statement">
+      I'm Max. I take products from first sketch to a model you can hold and a render you can believe — through CAD, PCB
+      design, material choices and user testing along the way.
+    </p>
+    {
+      about.data.availability && (
+        <aside class="intro__availability accent-navy">
+          <p class="intro__availability-title">{about.data.availability}</p>
+          <p>Industrial Design Engineering, Luleå University of Technology.</p>
+          <div class="button-row">
+            <a class="button button--light" href="/projects/">See the projects</a>
+            <a class="button button--ghost-light" href="/about/">Read my CV</a>
+          </div>
+        </aside>
+      )
+    }
+  </section>
+
+  <section class="process container" aria-labelledby="process-title">
+    <h2 id="process-title" class="section-title">How I work</h2>
+    <ol class="process__steps">
+      {
+        steps.map((step) => (
+          <li class="process__step">
+            <span class={`shape shape--${step.shape}`} aria-hidden="true" />
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="selected container" aria-labelledby="selected-title">
+    <div class="section-head">
+      <h2 id="selected-title" class="section-title">Selected work</h2>
+      <a class="text-link" href="/projects/">All {projects.length} projects</a>
+    </div>
+    <div class="selected__grid">
+      {featured.map((p, i) => <ProjectCard project={p} size={i === 0 ? 'large' : 'regular'} />)}
+    </div>
+  </section>
+</Base>
