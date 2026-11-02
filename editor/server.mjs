@@ -408,8 +408,64 @@ async function pushToGitHub(j) {
   return { ok: true };
 }
 
+const IMAGE_FILE = /\.(jpe?g|png|webp|gif|avif|svg)$/i;
+
+/**
+ * Replaced and removed images stay on disk while you edit — deleting a file the running preview has
+ * seen breaks it until it restarts. On publish, files that nothing refers to any more are removed:
+ * new uploads that ended up unused, and files the last published version used but this one doesn't.
+ * Files that were never used by the editor's pages are left alone.
+ */
+async function removeUnusedFiles() {
+  const untracked = new Set(
+    (await git(['ls-files', '--others', '--exclude-standard', '--', 'src/content', 'public'])).out.split('\n').filter(Boolean),
+  );
+  const atHead = async (file) => {
+    const r = await git(['show', `HEAD:${file}`]);
+    return r.code === 0 ? r.out : '';
+  };
+  let removedContent = 0;
+
+  // Project images are referenced as ./name from their own index.md.
+  for (const d of await fsp.readdir(PROJECTS, { withFileTypes: true })) {
+    if (!d.isDirectory()) continue;
+    const rel = `src/content/projects/${d.name}`;
+    const md = path.join(PROJECTS, d.name, 'index.md');
+    if (!fs.existsSync(md)) continue;
+    const now = await fsp.readFile(md, 'utf8');
+    const before = await atHead(`${rel}/index.md`);
+    for (const f of await fsp.readdir(path.join(PROJECTS, d.name))) {
+      if (!IMAGE_FILE.test(f) || now.includes(`./${f}`)) continue;
+      if (untracked.has(`${rel}/${f}`) || before.includes(`./${f}`)) {
+        await fsp.rm(path.join(PROJECTS, d.name, f), { force: true });
+        removedContent++;
+      }
+    }
+  }
+
+  // Films, posters and CV files in public/ are referenced as /videos/name or /name.pdf from any page.
+  const pages = (await git(['ls-files', '--', 'src/content'])).out.split('\n').filter((f) => f.endsWith('.md'));
+  let now = '';
+  let before = '';
+  for (const f of new Set([...pages, ...[...untracked].filter((x) => x.endsWith('.md'))])) {
+    now += await fsp.readFile(path.join(REPO, f), 'utf8').catch(() => '');
+    before += await atHead(f);
+  }
+  const candidates = [
+    ...(await fsp.readdir(path.join(PUBLIC, 'videos')).catch(() => [])).map((f) => [`public/videos/${f}`, `/videos/${f}`]),
+    ...(await fsp.readdir(PUBLIC)).filter((f) => f.endsWith('.pdf')).map((f) => [`public/${f}`, `/${f}`]),
+  ];
+  for (const [file, url] of candidates) {
+    if (now.includes(url)) continue;
+    if (untracked.has(file) || before.includes(url)) await fsp.rm(path.join(REPO, file), { force: true });
+  }
+  return removedContent;
+}
+
 async function publish(j) {
   j.step = 'Saving your changes';
+  const removed = await removeUnusedFiles();
+  if (removed) restartDev();
   await git(['add', '-A', '--', 'src/content', 'public']);
   const staged = (await git(['diff', '--cached', '--name-only'])).out.split('\n').filter(Boolean);
   let committed = false;
@@ -457,11 +513,12 @@ async function getUpdates(j) {
   const warning =
     stashesAfter > stashes ? ' Some unpublished changes clashed with the update and were set aside (git stash) — ask Claude to bring them back.' : '';
   if (after === before && after === builtCommit) return 'Already up to date.' + warning;
+  const gone = (await git(['diff', '--name-only', '--diff-filter=DR', before, after, '--', 'src/content'])).out.trim();
   if (depsHash() !== deps) {
     j.step = 'Installing new packages';
     await ensureDeps();
     restartDev();
-  }
+  } else if (gone) restartDev();
   if (after !== builtCommit) await buildLive(j);
   if (TOKEN && (await unpushed()) > 0) await pushToGitHub(j);
   const editorChanged = (await git(['diff', '--name-only', before, after, '--', 'editor'])).out.trim();
@@ -498,16 +555,27 @@ function startJob(name, fn) {
 let dev = null;
 let devLog = '';
 let devStopping = false;
+let devStartedAt = 0;
 function startDev() {
   const cmd = process.env.EDITOR_DEV_CMD || `"${path.join(REPO, 'node_modules/.bin/astro')}" dev --host 127.0.0.1 --port ${DEV_PORT}`;
   devStopping = false;
+  devStartedAt = Date.now();
+  // Astro keeps a list of every image it has seen until it restarts, and a file on that list that no
+  // longer exists breaks every page. Starting from a clean list avoids that.
+  for (const f of ['content-assets.mjs', 'data-store.json']) fs.rmSync(path.join(REPO, '.astro', f), { force: true });
   dev = spawn('sh', ['-c', `exec ${cmd}`], {
     cwd: REPO,
     env: { ...process.env, ASTRO_TELEMETRY_DISABLED: '1', BROWSER: 'none' },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   const onData = (d) => {
-    devLog = tail(devLog + stripAnsi(d), 12000);
+    const s = stripAnsi(d);
+    devLog = tail(devLog + s, 12000);
+    // If an image went missing anyway (for example a file deleted by hand), start the preview afresh.
+    if (/ImageNotFound|Could not find requested image/.test(s) && Date.now() - devStartedAt > 20_000) {
+      devLog += '\n[an image is missing — restarting the preview]\n';
+      restartDev();
+    }
   };
   dev.stdout.on('data', onData);
   dev.stderr.on('data', onData);
@@ -519,10 +587,11 @@ function startDev() {
 }
 function restartDev() {
   if (dev) {
-    dev.once('exit', () => setTimeout(startDev, 500));
+    if (devStopping) return; // already restarting
+    dev.once('exit', () => setTimeout(startDev, 300));
     devStopping = true;
     dev.kill('SIGTERM');
-  } else startDev();
+  } else if (state.ready && PASSWORD) startDev();
 }
 
 // ---------------------------------------------------------------- sessions
@@ -660,6 +729,7 @@ async function api(req, res, url) {
   if (route === 'projects' && method === 'DELETE') {
     if (!SLUG.test(q.slug || '') || !fs.existsSync(path.join(PROJECTS, q.slug))) throw new HttpError(404, 'Not found');
     await fsp.rm(path.join(PROJECTS, q.slug), { recursive: true, force: true });
+    restartDev();
     return send(res, 200, { ok: true });
   }
   if (route === 'order' && method === 'POST') {
@@ -705,23 +775,17 @@ async function api(req, res, url) {
     }
     throw new HttpError(400, 'Unknown upload');
   }
-  if (route === 'file' && method === 'DELETE') {
-    // Removes an image from a project folder once nothing refers to it any more.
-    const name = path.basename(q.name || '');
-    if (!SLUG.test(q.slug || '') || !/^[a-z0-9][a-z0-9._-]*\.(jpe?g|png|webp|gif|avif)$/i.test(name)) throw new HttpError(400, 'Bad file');
-    const dir = path.join(PROJECTS, q.slug);
-    const text = await fsp.readFile(path.join(dir, 'index.md'), 'utf8').catch(() => '');
-    if (text.includes(`./${name}`)) return send(res, 200, { kept: true });
-    await fsp.rm(path.join(dir, name), { force: true });
-    return send(res, 200, { ok: true });
-  }
-
   if (route === 'publish' && method === 'POST') return send(res, 200, { job: startJob('Publishing', publish) });
   if (route === 'update' && method === 'POST') return send(res, 200, { job: startJob('Getting updates', getUpdates) });
   if (route === 'discard' && method === 'POST') {
     if (job && !job.done) throw new HttpError(409, 'Please wait until the current job has finished.');
     await git(['checkout', '--', 'src/content', 'public']);
     await git(['clean', '-fdq', '--', 'src/content', 'public']);
+    restartDev();
+    return send(res, 200, { ok: true });
+  }
+  if (route === 'restart-preview' && method === 'POST') {
+    restartDev();
     return send(res, 200, { ok: true });
   }
   throw new HttpError(404, 'Unknown request');

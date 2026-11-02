@@ -1125,12 +1125,6 @@ function dropZone(label, small, accept, multiple, onFiles) {
   return zone;
 }
 
-/** Deletes an image file once the saved text no longer refers to it. */
-async function forgetFile(slug, src) {
-  await flush();
-  if (src) api.del(`file?${new URLSearchParams({ slug, name: basename(src) })}`).catch(() => {});
-}
-
 function parsePosition(s) {
   const kw = { left: 0, center: 50, right: 100, top: 0, bottom: 100 };
   const val = (t) => (t in kw ? kw[t] : parseFloat(t));
@@ -1195,13 +1189,11 @@ function renderCover(obj, ctx) {
       dropZone('Replace the cover — drop an image here or click', 'JPEG or PNG. Big photos are resized and their location data removed.', 'image/*', false, async ([file]) => {
         status.textContent = 'Uploading…';
         try {
-          const old = obj.cover;
           const res = await api.upload({ kind: 'image', slug: ctx.slug }, file);
           obj.cover = res.value;
           obj.coverPosition = '50% 50%';
           ctx.changed();
           draw();
-          if (old && old !== res.value) forgetFile(ctx.slug, old);
         } catch (e) {
           status.textContent = e.message;
         }
@@ -1289,10 +1281,9 @@ function renderGallery(obj, ctx) {
               text: '✕',
               onclick: () => {
                 if (!confirm('Remove this image from the gallery?')) return;
-                const [gone] = arr().splice(i, 1);
+                arr().splice(i, 1);
                 draw();
                 ctx.changed();
-                forgetFile(ctx.slug, gone.src);
               },
             }),
           ),
@@ -1666,6 +1657,20 @@ function trackJob(job, { restartAware = false, quiet = false } = {}) {
   setTimeout(poll, 800);
 }
 
+async function restartPreview() {
+  $('.more').open = false;
+  try {
+    await api.post('restart-preview');
+    toast('Restarting the preview — it’s back in a few seconds.', 'ok');
+    setTimeout(() => {
+      memoScroll();
+      frame().contentWindow.location.reload();
+    }, 1500);
+  } catch (e) {
+    toast(e.message, 'error');
+  }
+}
+
 async function showDevLog() {
   $('.more').open = false;
   const { log, running } = await api.get('devlog');
@@ -1674,7 +1679,7 @@ async function showDevLog() {
     h(
       'div',
       {},
-      h('p', { text: running ? 'Messages from the preview server. Errors about content show up here and in the preview itself.' : 'The preview server is not running right now — it restarts by itself.' }),
+      h('p', { text: running ? 'Messages from the preview server. If the preview shows an error that doesn’t go away, use “Restart the preview” in the ••• menu.' : 'The preview server is not running right now — it restarts by itself.' }),
       h('pre', { text: log || '(empty)' }),
     ),
   );
@@ -1691,6 +1696,7 @@ function wireChrome() {
   $('#changes-btn').addEventListener('click', showChanges);
   $('#update-btn').addEventListener('click', getUpdates);
   $('#devlog-btn').addEventListener('click', showDevLog);
+  $('#restart-preview-btn').addEventListener('click', restartPreview);
   $('#reload-btn').addEventListener('click', () => {
     memoScroll();
     frame().contentWindow.location.reload();
