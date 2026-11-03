@@ -153,6 +153,7 @@ npm run build      # builds to dist/
 ## Design notes
 
 - Colours: paper `#FAF8F3`, ink `#1F2636`, rust `#AD542D`, navy `#243049`, olive `#5B6837`, mustard `#D9A43A`, sand `#DCCDB2`. All in `src/styles/global.css`.
+- Dark mode follows the visitor's system setting; the half-circle button in the header switches it and remembers the choice (`src/scripts/theme.js`). The dark colours are the `[data-theme='dark']` block at the top of `global.css` — the colour fields stay the same, only the page around them darkens.
 - Type: Inter Display Black for headlines, Inter for text — self-hosted in `public/fonts/` (SIL Open Font License, see `public/fonts/OFL.txt`), so the site makes no requests to outside servers.
 - The tile artwork on the home page is `src/components/Pattern.astro` — 32 small tiles, so each one can animate on its own. (`public/pattern.svg` is the same artwork as a single image.)
 - Motion: `src/scripts/motion.js` reveals elements marked `data-reveal="rise"`, `"wipe"` or `"roll"` as they scroll into view, and feeds a 0–1 scroll value (`--p`) to elements marked `data-progress`, which the "Motion" section of `global.css` turns into the hero coming apart, the sliding word band, cover parallax and so on. Visitors who have turned on *reduce motion* in their system settings get the static site, and so does anyone without JavaScript.
