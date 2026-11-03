@@ -15,7 +15,7 @@ cover: ./cover.jpg
 coverAlt: A fan of black V1 circuit boards with white silkscreen reading STATIC and Smart Blind V.1
 accent: mustard
 category: hobby
-order: 1
+order: 2
 gallery:
   - src: ./schematic.png
     alt: Schematic with the 24 V screw terminal and capacitor, the 24 to 5 V buck converter, the A4988 stepper driver, the ESP32-C3 and the four-pin motor connector

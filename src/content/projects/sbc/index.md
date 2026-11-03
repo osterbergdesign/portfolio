@@ -15,7 +15,7 @@ cover: ./cover.jpg
 coverAlt: The SBC logo — the letters SBC with a play triangle inside the B, the words Static Broadcasting Channel, and four square pictograms of a tyre, a lab flask, a factory and a gorilla
 accent: sand
 category: hobby
-order: 5
+order: 6
 gallery:
   - src: ./sbc-discovery.jpg
     alt: The SBC Discovery logo — the Colosseum with a broadcast antenna on top, the four theme pictograms below it and the words SBC Discovery

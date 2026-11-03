@@ -16,7 +16,7 @@ cover: ./cover.jpg
 coverAlt: Illustration in LoCal's colours — a cyan progress ring for the day's calories beside three bars for protein, carbohydrates and fat
 accent: olive
 category: hobby
-order: 2
+order: 3
 links:
   - label: View on GitHub
     url: https://github.com/osterbergdesign/LoCal-Tracker

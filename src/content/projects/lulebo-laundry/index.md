@@ -16,7 +16,7 @@ cover: ./cover.jpg
 coverAlt: Illustration of a week of laundry times as a grid of tiles, two of them highlighted as booked, next to a washing machine drum
 accent: navy
 category: hobby
-order: 4
+order: 5
 links:
   - label: View on GitHub
     url: https://github.com/osterbergdesign/lulebo-laundry-ha
