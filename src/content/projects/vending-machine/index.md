@@ -18,7 +18,7 @@ cover: ./cover.jpg
 coverAlt: Three screens of the new vending machine interface — start screen, store and cart — on a sand background
 accent: navy
 featured: true
-order: 3
+order: 5
 gallery:
   - src: ./concepts-start.jpg
     alt: Three alternative start screens side by side

@@ -15,7 +15,7 @@ highlights:
 cover: ./cover.jpg
 coverAlt: Chrome tap with a ribbed grille over a white vessel basin on a marble counter
 accent: mustard
-order: 4
+order: 3
 gallery:
   - src: ./render-countertop.jpg
     alt: Wide view of the basin, tap and soap bottles on a marble counter

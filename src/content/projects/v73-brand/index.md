@@ -17,7 +17,7 @@ cover: ./cover.jpg
 coverPosition: left center
 coverAlt: Navy cover of the V73 brand manual with the oval V73 logo and the title Varumärkesmanual
 accent: navy
-order: 7
+order: 4
 gallery:
   - src: ./logo-usage.jpg
     alt: Manual page showing the logo in vertical, horizontal and symbol configurations
