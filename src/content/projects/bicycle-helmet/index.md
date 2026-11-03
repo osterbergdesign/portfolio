@@ -18,7 +18,7 @@ highlights:
 cover: ./cover.jpg
 coverAlt: Graphic cross-section of a helmet showing a thin navy shell, a thick hatched foam liner and a rust padding layer, with straps and a buckle
 accent: sand
-order: 6
+order: 5
 gallery:
   - src: ./liner-foam-chart.jpg
     alt: CES EduPack bubble chart of compressive modulus against elastic stored energy, with the shortlisted foams highlighted in green
