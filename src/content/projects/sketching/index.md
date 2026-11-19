@@ -13,7 +13,7 @@ highlights:
 cover: ./cover.jpg
 coverAlt: Ideation sheet of fineliner sketches with two concepts in colour, labelled The Gambler and The Roomba
 accent: olive
-order: 7
+order: 8
 gallery:
   - src: ./ideation-sheet.jpg
     alt: Full ideation sheet with thumbnails of coffee grinders, brewers, cups and storage
